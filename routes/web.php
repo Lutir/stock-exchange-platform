@@ -1,0 +1,82 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
+
+Route::group(['middleware' => 'auth'], function () {
+	Route::get('table-list', function () {
+		return view('pages.table_list');
+	})->name('table');
+
+	// Route::get('typography', function () {
+	// 	return view('pages.typography');
+	// })->name('typography');
+
+	Route::get('icons', function () {
+		return view('pages.icons');
+	})->name('icons');
+
+	Route::get('profile', function () {
+		return view('pages.profile');
+	})->name('profile');
+
+	Route::get('viewStocks', function () {
+		return view('pages.viewStocks');
+	})->name('profile');
+
+	Route::get('viewStocks', function () {
+		return view('pages.viewStocks');
+	})->name('viewStocks');
+
+	Route::get('map', function () {
+		return view('pages.map');
+	})->name('map');
+
+	Route::get('notifications', function () {
+		return view('pages.notifications');
+	})->name('notifications');
+
+	Route::get('rtl-support', function () {
+		return view('pages.language');
+	})->name('language');
+
+	Route::get('upgrade', function () {
+		return view('pages.upgrade');
+	})->name('upgrade');
+
+});
+Route::get('myStocks', 'StockController@getMyStocks');
+Route::get('profile', 'ProfileController@getProfile');
+
+// Route::post('getProfilePage', 'ProfileController@createProfile');
+Route::post('search-stock', 'StockController@getStockDetails');
+Route::post('add-stock', 'StockController@addStock');
+Route::post('addBankAccount', 'ProfileController@addAccount');
+Route::post('changeAccountStatus', 'ProfileController@changeAccountStatus');
+Route::get('transactions', 'StockController@getStocks');
+Route::post('buyStock', 'StockController@buyStock');
+Route::post('sellStock', 'StockController@sellStock');
+Route::post('render', 'HomeController@render');
+
+Route::group(['middleware' => 'auth'], function () {
+	Route::resource('user', 'UserController', ['except' => ['show']]);
+	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
+	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
+	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+});
+
